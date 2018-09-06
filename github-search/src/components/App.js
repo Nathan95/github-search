@@ -1,31 +1,27 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
 
 class App extends Component {
-
-  constructor(props){
-    super(props);
-
-    this.state = {
-      repos: [],
-      isLoading: false,
-      error: null,
-      search: ''
-    }
+  
+  state = {
+    repos: [],
+    isLoading: false,
+    error: null,
+    search: ''
   }
 
   componentDidMount() {
    this.setState({ isLoading: true });
+   this.fetchData();
+  }
 
-   fetch(`https://api.github.com/search/repositories?q=react`)
-     .then(response => response.json())
-     .then(data => this.setState({ repos: data, isLoading: false }))
-     .catch(error => this.setState({ error, isLoading: false }));
-
- }
-
-  fetchData(){
-
+  async fetchData() {
+    try {
+      const response = await axios.get(`https://api.github.com/search/repositories?q=react`);
+      this.setState({ repos: response.data.items, isLoading: false });
+    } catch (error) {
+      this.setState({ error, isLoading: false });
+    }
   }
 
   onType(event) {
@@ -38,14 +34,8 @@ class App extends Component {
   render() {
     return (
       <div>
-          {
-             this.state.repos.items.map((repo, index) => {
-               return (
-                  <div key={index}>{repo}</div>
-              );
-            })
-          }
-        </div>
+        {this.state.repos.map((repo, index) => <div key={index}><pre>{JSON.stringify(repo)}</pre></div>)}
+      </div>
     );
   }
 
