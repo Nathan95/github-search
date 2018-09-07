@@ -18,7 +18,7 @@ class App extends Component {
 
   async fetchData() {
     try {
-      const response = await axios.get(`https://api.github.com/search/repositories?q=vue`);
+      const response = await axios.get(` https://api.github.com/search/repositories?q=stars`);
       this.setState({ repos: response.data.items, isLoading: false });
     } catch (error) {
       this.setState({ error, isLoading: false });
@@ -48,8 +48,9 @@ class App extends Component {
     return (
       <div>
       <form>
+      Search:
       <input
-         placeholder="Search for..."
+         placeholder="Search for repo"
          value={this.state.query}
          onChange={this.updateSearch.bind(this)}
        />
